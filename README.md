@@ -57,12 +57,35 @@ Tags-Version
    MAILCATCHER URL: http://localhost/mailcatcher
 
 
-2. SSH/SFTP Zugang
+2. SSH/SFTP Access
 
 - ssh dockware@localhost dockware:dockware
 
 
-3. Container Zugang
+3. Container Access
 
 - docker exec -it dw__myshop_dev_shopware bash
 - docker compose exec shop bash
+
+
+## Start and set up the Shopware environment via make:
+
+``bash
+# build the Shopware environment
+$ make build
+```
+
+``bash
+# start Shopware environment 
+$ make start
+```
+
+```bash
+# stop Shopware environment 
+$ make stop
+```
+
+```bash
+# destroy Shopware environment 
+$ make down
+```
