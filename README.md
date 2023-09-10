@@ -70,12 +70,12 @@ Tags-Version
 
 ## Start and set up the Shopware environment via make:
 
-``bash
+```bash
 # build the Shopware environment
 $ make build
 ```
 
-``bash
+```bash
 # start Shopware environment 
 $ make start
 ```
