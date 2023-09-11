@@ -5,8 +5,7 @@
 .PHONY: help build deploy start stop logs restart shell up
 
 DOCKER_COMPOSE_COMMAND := @docker-compose -f ${PWD}/docker-compose.yml
-DOCKER_COMPOSE_COPY := cp ${PWD}/docker-compose.yml.dist ${PWD}/docker-compose.yml
-DOCKER_PLATFORM := docker run --rm -v$(PWD):/external -w/external -it ubuntu:latest sh starter.sh
+DOCKER_COMPOSE_COPY := cp ${PWD}/docker/docker-compose.yml.dist ${PWD}/docker-compose.yml
 
 help: ## Display this help.
 
@@ -17,9 +16,9 @@ help: ## Display this help.
 #################
 build: ## Build the shopware environment
 
-	@if [ ! -f docker-compose.yml.dist ] ; then ${DOCKER_PLATFORM} ; fi
+	@if [ ! -f docker-compose.yml.dist ] ; then  sh starter.sh ; fi
 
-	@if [ ! -f docker-compose.yml ] ; then ${DOCKER_COMPOSE_COPY} ; fi
+	@if [ ! -f docker-compose.yml ] ; then  ${DOCKER_COMPOSE_COPY} ; fi
 
 	${DOCKER_COMPOSE_COMMAND} up -d
 
@@ -51,4 +50,3 @@ MAKEFLAGS = -s
 clean: ## Clean Root project Folder
 
 	rm -rf docker-compose.*
-	docker images | grep "dockware/dev" | awk '{print $3}' | xargs docker rmi -f
