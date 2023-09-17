@@ -7,10 +7,10 @@ an admin and a mailcatcher.
 
 Links:
 - https://dockware.io/getstarted
+- https://docs.dockware.io/use-dockware/default-credentials
 - https://github.com/dockware/dockware
 - https://www.dasistweb.de/de/academy/artikel/dockware
 - https://github.com/dockware/examples/blob/master/basic-dev-setup/docker-compose.yml
-- https://docs.dockware.io/use-dockware/default-credentials
 - https://developer.shopware.com/docs/guides/plugins/apps/app-base-guide
 - https://developers.shopware.com/developers-guide/rest-api
 
@@ -89,3 +89,24 @@ $ make stop
 # destroy Shopware environment 
 $ make down
 ```
+
+```bash
+# update Shopware environment 
+$ make update
+```
+
+```bash
+# deletes docker compose files and the dockware images
+$ make clean
+```
+
+```bash
+# create database backup
+$ make db-backup
+```
+
+```bash
+# restore a database dump
+$ make db-restore
+```
+

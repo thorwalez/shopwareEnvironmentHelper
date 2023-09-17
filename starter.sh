@@ -4,6 +4,9 @@ if [ ! -f docker-compose.yml.dist ]; then
   if hash wget 2>/dev/null; then
     wget -O docker-compose.yml.dist https://raw.githubusercontent.com/dockware/examples/master/basic-dev-setup/docker-compose.yml
   else
+    if ! [ -x "$(command -v curl)" ]; then
+      apt-get update && apt-get install -y curl
+    fi
     curl https://raw.githubusercontent.com/dockware/examples/master/basic-dev-setup/docker-compose.yml -o docker-compose.yml.dist
   fi
 fi
@@ -48,4 +51,6 @@ if [ -f docker-compose.yml ]; then
     DBPort=3306
   fi
   sed -i "s/3306:3306/$DBPort:3306/g" $YAML_FILE
+
+  sed -i "s/\#volumes:/volumes:\n      - .\/plugins:\/var\/www\/html\/custom\/plugins\n      - .\/plugins:\/var\/www\/html\/engine\/Shopware\/Plugins\/Community\/Backend\n      - .\/uploads:\/var\/www\/html\/uploads/g" $YAML_FILE
 fi
