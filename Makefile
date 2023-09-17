@@ -6,7 +6,6 @@
 
 today := $(shell date +%Y-%m-%d)
 DOCKER_COMPOSE_COMMAND := @docker-compose -f ${PWD}/docker-compose.yml
-DOCKER_COMPOSE_COPY := cp ${PWD}/docker-compose.yml.dist ${PWD}/docker-compose.yml
 DOCKER_PLATFORM := docker run --rm -v ${PWD}:/external -w /external -it ubuntu:latest sh starter.sh
 
 dbShopware ?= $(shell bash -c 'read -p "Wie heißt die Datei [Beispiel: shopware.sql]?" dbShopware; echo $$dbShopware')
