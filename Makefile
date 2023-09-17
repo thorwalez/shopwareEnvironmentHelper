@@ -69,4 +69,4 @@ clean: ## Clean Root project Folder
 	rm -rf docker-compose.*
 	if docker images | grep "dockware" > /dev/null; then \
         docker images | grep "dockware" | awk '{print $3}' | xargs docker rmi -f; \
-  fi
+    fi
