@@ -11,7 +11,6 @@ DOCKER_PLATFORM := docker run --rm -v ${PWD}:/external -w /external -it ubuntu:l
 
 dbShopware ?= $(shell bash -c 'read -p "Wie heißt die Datei [Beispiel: shopware.sql]?" dbShopware; echo $$dbShopware')
 
-
 help: ## Display this help.
 
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
@@ -22,7 +21,6 @@ help: ## Display this help.
 build: ## Build the shopware environment
 	mkdir -p plugins backup uploads
 	@if [ ! -f docker-compose.yml.dist ] ; then ${DOCKER_PLATFORM} ; fi
-
 	${DOCKER_COMPOSE_COMMAND} up -d
 
 start: ## Start the shopware container
@@ -65,11 +63,10 @@ db-restore: ## restor Database
 
 	${DOCKER_COMPOSE_COMMAND} exec -uroot -T shop mysql -uroot -proot shopware< ./backup/$(dbShopware)
 
-
 MAKEFLAGS = -s
 clean: ## Clean Root project Folder
 
 	rm -rf docker-compose.*
 	if docker images | grep "dockware" > /dev/null; then \
         docker images | grep "dockware" | awk '{print $3}' | xargs docker rmi -f; \
-    fi
+  fi
