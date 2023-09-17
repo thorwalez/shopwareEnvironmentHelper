@@ -59,9 +59,17 @@ db-backup: ## Database backup create
 
 	${DOCKER_COMPOSE_COMMAND} exec -uroot shop mysqldump -uroot -proot shopware | gzip > ./backup/shopware_$(today).sql.gz
 
-db-restore: ## restor Database
+db-restore: ## restore Database to shopware
 
 	${DOCKER_COMPOSE_COMMAND} exec -uroot -T shop mysql -uroot -proot shopware< ./backup/$(dbShopware)
+
+db-persist: ## Shopware Database persist on host
+
+	mkdir -p ./db-persist && docker cp shop:/var/lib/mysql/ ./db-persist
+
+shopware-persist: ## Shopware source code persist on host
+
+	mkdir -p ./src-persist && docker cp shop:/var/www/html/. ./src-persist
 
 MAKEFLAGS = -s
 clean: ## Clean Root project Folder

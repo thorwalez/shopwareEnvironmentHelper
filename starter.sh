@@ -52,5 +52,7 @@ if [ -f docker-compose.yml ]; then
   fi
   sed -i "s/3306:3306/$DBPort:3306/g" $YAML_FILE
 
-  sed -i "s/\#volumes:/volumes:\n      - .\/plugins:\/var\/www\/html\/custom\/plugins\n      - .\/plugins:\/var\/www\/html\/engine\/Shopware\/Plugins\/Community\/Backend\n      - .\/uploads:\/var\/www\/html\/uploads/g" $YAML_FILE
+  volumePath="volumes:\n      - .\/plugins:\/var\/www\/html\/custom\/plugins\n      - .\/plugins:\/var\/www\/html\/engine\/Shopware\/Plugins\/Community\/Backend\n      - .\/uploads:\/var\/www\/html\/uploads"
+  sed -i "s/\#volumes:/$volumePath/g" $YAML_FILE
+
 fi
