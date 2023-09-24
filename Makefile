@@ -10,6 +10,15 @@ DOCKER_PLATFORM := docker run --rm -v ${PWD}:/external -w /external -it ubuntu:l
 
 dbShopware ?= $(shell bash -c 'read -p "Wie heißt die Datei [Beispiel: shopware.sql]?" dbShopware; echo $$dbShopware')
 
+ifeq ($(wildcard $(CURDIR)/.env),)
+    $(shell bash -c 'read -p "Wie soll das externe Netzwerk heißen?" transferNetworkNameLine; echo "extern-network:"$$transferNetworkNameLine >.env;')
+
+    $(info Das Netzwerk muss manuel in die docker-compose.yml eingefügt werden.)
+endif
+
+transferNetworkNameLine := $(shell grep "extern-network" .env | awk -F ':' '{print $$2}')
+
+
 help: ## Display this help.
 
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
@@ -76,4 +85,10 @@ clean: ## Clean Root project Folder
 	rm -rf docker-compose.*
 	if docker images | grep "dockware" > /dev/null; then \
         docker images | grep "dockware" | awk '{print $3}' | xargs docker rmi -f; \
+    fi
+
+create-network: ## creates external link network for container
+
+	if ! docker network ls | grep "$(transferNetworkNameLine)"  > /dev/null; then \
+       docker network create --driver=bridge $(transferNetworkNameLine);  \
     fi

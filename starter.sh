@@ -55,4 +55,16 @@ if [ -f docker-compose.yml ]; then
   volumePath="volumes:\n      - .\/plugins:\/var\/www\/html\/custom\/plugins\n      - .\/plugins:\/var\/www\/html\/engine\/Shopware\/Plugins\/Community\/Backend\n      - .\/uploads:\/var\/www\/html\/uploads"
   sed -i "s/\#volumes:/$volumePath/g" $YAML_FILE
 
+  read -r -p "Soll ein Externes Netzwerk gesetzt werden?[Bsp.: transfer-net?" ExNet
+  if [ -n "$ExNet" ]; then
+    sed -i "s/- web/- web\n      - $ExNet/g" $YAML_FILE
+    sed -i '$a\  '"$ExNet:\n    external: true" $YAML_FILE
+
+    if [ ! -f .env ]; then
+      echo "extern-network:$ExNet\n" > .env
+    else
+      sed -i '$a extern-network:'"$ExNet\n" .env
+    fi
+  fi
+
 fi
