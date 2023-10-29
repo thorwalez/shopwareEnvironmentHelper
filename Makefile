@@ -10,7 +10,7 @@ DOCKER_PLATFORM := docker run --rm -v ${PWD}:/external -w /external -it ubuntu:l
 
 dbShopware ?= $(shell bash -c 'read -p "Wie heißt die Datei [Beispiel: shopware.sql]?" dbShopware; echo $$dbShopware')
 
-transferNetworkNameLine := $(shell grep "extern-network" .env | awk -F ':' '{print $$2}')
+transferNetworkNameLine := $(shell grep "extern-network" env | awk -F ':' '{print $$2}')
 
 
 help: ## Display this help.
@@ -79,13 +79,13 @@ shopware-version: ## Shows Shopware version and saves it in root
 	${DOCKER_COMPOSE_COMMAND} exec shop bin/console --version >versionInUse.md
 
 MAKEFLAGS = -s
-clean: ## Clean Root project Folder
+clear: ## Clear Root project Folder
 
 	if [ -n "$(docker ps -q -f name=shop)" ]; then \
-		${DOCKER_COMPOSE_COMMAND} down -v --rmi local --remove-orphans \
+		${DOCKER_COMPOSE_COMMAND} down -v --rmi local --remove-orphans; \
 	fi
 
-	rm -rf docker-compose.* .env
+	rm -rf docker-compose.* env
 
 	if docker images | grep "dockware" > /dev/null; then \
         docker images | grep "dockware" | awk '{print $3}' | xargs docker rmi -f; \

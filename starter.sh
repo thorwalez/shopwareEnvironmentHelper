@@ -66,10 +66,10 @@ if [ -f docker-compose.yml ]; then
     sed -i "s/- web/- web\n      - $ExNet/g" $YAML_FILE
     sed -i '$a\  '"$ExNet:\n    external: true" $YAML_FILE
 
-    if [ ! -f .env ]; then
-      echo "extern-network:$ExNet\n" > .env
+    if [ ! -f env ]; then
+      echo "extern-network:$ExNet\n" > env
     else
-      sed -i '$a extern-network:'"$ExNet\n" .env
+      sed -i '$a extern-network:'"$ExNet\n" env
     fi
   fi
 fi

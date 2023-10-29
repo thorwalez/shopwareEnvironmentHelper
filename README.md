@@ -97,7 +97,7 @@ $ make update
 
 ```bash
 # deletes docker compose files and the dockware images
-$ make clean
+$ make clear
 ```
 
 ```bash
@@ -130,7 +130,7 @@ Note: In the external container Shopware cannot be reached via localhost!
 Example of a docker run command of an external container:
 ```bash
 ## docker run --link <shopware-container-name>:<shopware-container-domain> --network <external-network-sw> -d ubuntu:latest
-$ docker run --link shop:sw.external.io --network transfer-net-sw -d ubuntu:latest
+$ docker run --link shop:sw.external.local --network transfer-net-sw -d ubuntu:latest
 ```
 
 Example of a docker compose yaml of an external container:
@@ -146,3 +146,8 @@ networks:
   <shopware-container-network-name>:
     external: true
 ```
+
+## Note on restoring Shopware databases
+
+When restoring a Shopware database, it should be ensured that the same Shopware version 
+is used for the database backup. Otherwise it can lead to display errors in the frontend.
