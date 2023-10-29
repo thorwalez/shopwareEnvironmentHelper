@@ -10,13 +10,7 @@ DOCKER_PLATFORM := docker run --rm -v ${PWD}:/external -w /external -it ubuntu:l
 
 dbShopware ?= $(shell bash -c 'read -p "Wie heißt die Datei [Beispiel: shopware.sql]?" dbShopware; echo $$dbShopware')
 
-ifeq ($(wildcard $(CURDIR)/.env),)
-    $(shell bash -c 'read -p "Wie soll das externe Netzwerk heißen?" transferNetworkNameLine; echo "extern-network:"$$transferNetworkNameLine >.env;')
-
-    $(info Das Netzwerk muss manuel in die docker-compose.yml eingefügt werden.)
-endif
-
-transferNetworkNameLine := $(shell grep "extern-network" .env | awk -F ':' '{print $$2}')
+transferNetworkNameLine := $(shell grep "extern-network" env | awk -F ':' '{print $$2}')
 
 
 help: ## Display this help.
@@ -79,10 +73,20 @@ shopware-persist: ## Shopware source code persist on host
 
 	mkdir -p ./src-persist && docker cp shop:/var/www/html/. ./src-persist
 
-MAKEFLAGS = -s
-clean: ## Clean Root project Folder
+shopware-version: ## Shows Shopware version and saves it in root
 
-	rm -rf docker-compose.*
+	${DOCKER_COMPOSE_COMMAND} exec shop bin/console --version
+	${DOCKER_COMPOSE_COMMAND} exec shop bin/console --version >versionInUse.md
+
+MAKEFLAGS = -s
+clear: ## Clear Root project Folder
+
+	if [ -n "$(docker ps -q -f name=shop)" ]; then \
+		${DOCKER_COMPOSE_COMMAND} down -v --rmi local --remove-orphans; \
+	fi
+
+	rm -rf docker-compose.* env
+
 	if docker images | grep "dockware" > /dev/null; then \
         docker images | grep "dockware" | awk '{print $3}' | xargs docker rmi -f; \
     fi

@@ -97,7 +97,7 @@ $ make update
 
 ```bash
 # deletes docker compose files and the dockware images
-$ make clean
+$ make clear
 ```
 
 ```bash
@@ -110,3 +110,44 @@ $ make db-backup
 $ make db-restore
 ```
 
+## Provide Shopware for external containers to link to
+
+There are two ways to link a Shopware container with an external one.
+
+1) The external container already has a network which is accessible from the outside, recognizable by "external: true". 
+   Then enter this in the question "Should an external network be set?" with its network name.
+
+2) You create a new network which is externally accessible. Then you enter the name of the network in the question 
+   "Should an external network be set?" and execute "make create-network" after the build.
+   Then you have to announce the network in the external container.
+
+So that the containers can communicate within the network over which they are linked. 
+In the external container system, the Shopware container name and the Shopware domain 
+under which Shopware is accessible must be specified via --link in "docker run" or external_links in "docker compose".
+
+Note: In the external container Shopware cannot be reached via localhost!
+
+Example of a docker run command of an external container:
+```bash
+## docker run --link <shopware-container-name>:<shopware-container-domain> --network <external-network-sw> -d ubuntu:latest
+$ docker run --link shop:sw.external.local --network transfer-net-sw -d ubuntu:latest
+```
+
+Example of a docker compose yaml of an external container:
+```yaml
+service:
+
+  networks:
+     - "<shopware-container-network-name>"
+  external_links:
+     - "<shopware-container-name>:<shopware-container-domain>"
+
+networks:
+  <shopware-container-network-name>:
+    external: true
+```
+
+## Note on restoring Shopware databases
+
+When restoring a Shopware database, it should be ensured that the same Shopware version 
+is used for the database backup. Otherwise it can lead to display errors in the frontend.
