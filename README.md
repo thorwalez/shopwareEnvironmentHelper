@@ -125,7 +125,13 @@ So that the containers can communicate within the network over which they are li
 In the external container system, the Shopware container name and the Shopware domain 
 under which Shopware is accessible must be specified via --link in "docker run" or external_links in "docker compose".
 
-Note: In the external container Shopware cannot be reached via localhost!
+Note: 
+
+- In the external container Shopware cannot be reached via localhost!
+- 
+- If a domain with a port is to be used. Then within the Shopware another domain 
+must be specified for the API and this must be allocated in as external_links.
+
 
 Example of a docker run command of an external container:
 ```bash
