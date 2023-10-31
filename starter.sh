@@ -57,6 +57,9 @@ if [ -f docker-compose.yml ]; then
 
   read -r -p "Soll eine Domain für Shopware gesetzt werden?[Bsp.: sw.external.local | Default: localhost]?" DOMAIN
   if [ -n "$DOMAIN" ]; then
+    if [ "$WWWPort" != "80" ]; then
+      DOMAIN="$DOMAIN:$WWWPort"
+    fi
     environmentLine="- XDEBUG_ENABLED=0"
     sed -i "s/$environmentLine/$environmentLine\n      - SHOP_DOMAIN=$DOMAIN/g" $YAML_FILE
   fi
